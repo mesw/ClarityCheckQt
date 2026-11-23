@@ -46,8 +46,8 @@ class ScoringEngine
 public:
     // Score ASRS v1.1 Part A
     // responses: 6 integers, each 0–4 (Never=0 … Very Often=4)
-    // Items 1–4: positive if value >= 3 (Often or Very Often)
-    // Items 5–6: positive if value == 4 (Very Often only)
+    // Items 1–3: positive if value >= 2 (Sometimes, Often or Very Often)
+    // Items 4–6: positive if value >= 3 (Often or Very Often)
     static AsrsResult scoreAsrs(const QVector<int> &responses);
 
     // Score PHQ-9

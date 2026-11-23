@@ -154,7 +154,7 @@ The following UI characteristics have been identified as safety-relevant and sha
 | Score display format | Numeric score alone may be misinterpreted; category label and plain-language interpretation are safety controls |
 | Results page information hierarchy | If disclaimer is below the fold, it may never be seen on mobile |
 | Print/save output formatting | Results document must not resemble a clinical record |
-| ASRS threshold item differentiation | Items 5–6 have a higher threshold — question presentation must not imply uniform scoring |
+| ASRS threshold item differentiation | Items 4–6 have a higher threshold (Often) than items 1–3 (Sometimes) — question presentation must not imply uniform scoring |
 
 ---
 

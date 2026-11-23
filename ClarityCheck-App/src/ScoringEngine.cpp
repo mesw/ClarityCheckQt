@@ -5,22 +5,17 @@
 #include "ScoringEngine.h"
 
 // DC-003 §3.2 — ASRS v1.1 Part A scoring
-// Items 1–4: positive if value >= 3 (Often or Very Often)
-// Items 5–6: positive if value == 4 (Very Often only)
+// Shaded boxes per the published ASRS v1.1 Symptom Checklist:
+// Items 1–3: positive if value >= 2 (Sometimes, Often or Very Often)
+// Items 4–6: positive if value >= 3 (Often or Very Often)
 // Positive screen if positiveCount >= 4
 AsrsResult ScoringEngine::scoreAsrs(const QVector<int> &responses)
 {
     AsrsResult result;
     for (int i = 0; i < 6 && i < responses.size(); ++i) {
-        const int val = responses[i];
-        if (i < 4) {
-            if (val >= 3)
-                ++result.positiveCount;
-        } else {
-            // Items 5 and 6 (index 4 and 5): Very Often (4) only
-            if (val == 4)
-                ++result.positiveCount;
-        }
+        const int threshold = (i < 3) ? 2 : 3;
+        if (responses[i] >= threshold)
+            ++result.positiveCount;
     }
     result.positiveScreen = (result.positiveCount >= 4);
     return result;

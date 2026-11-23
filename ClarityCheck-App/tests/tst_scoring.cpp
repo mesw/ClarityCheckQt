@@ -1,8 +1,8 @@
 // tst_scoring.cpp
 //
 // Unit tests for ScoringEngine
-// DC-004 §6: UT-ASRS-01–08, UT-PHQ-01–12, UT-GAD-01–09
-// All 29 test cases are data-driven and map directly to DC-003 §4 boundary test cases.
+// DC-004 §6: UT-ASRS-01–10, UT-PHQ-01–12, UT-GAD-01–09
+// All 31 test cases are data-driven and map directly to DC-003 §4 boundary test cases.
 
 #include <QtTest>
 #include "ScoringEngine.h"
@@ -27,7 +27,7 @@ private slots:
 
 // ──────────────────────────────────────────────
 // ASRS Part A
-// DC-003 §3.2: items 1–4 positive if >= 3; items 5–6 positive if == 4
+// DC-003 §3.2: items 1–3 positive if >= 2; items 4–6 positive if >= 3
 // ──────────────────────────────────────────────
 
 void TstScoring::asrs_data()
@@ -39,8 +39,7 @@ void TstScoring::asrs_data()
     // UT-ASRS-01: all zeros → 0 positives, negative screen
     QTest::newRow("UT-ASRS-01") << QVector<int>{0,0,0,0,0,0} << 0 << false;
 
-    // UT-ASRS-02: items 1–4 at Often(3) missing one threshold → 3 positives, negative screen
-    // DC-003 §4.1: [4,4,4,0,0,0] → 3 positives (items 1–3 positive, item 4 = 0 not positive)
+    // UT-ASRS-02: items 1–3 positive, items 4–6 = 0 → 3 positives, negative screen
     QTest::newRow("UT-ASRS-02") << QVector<int>{4,4,4,0,0,0} << 3 << false;
 
     // UT-ASRS-03: exact threshold — 4 positives → positive screen
@@ -49,19 +48,26 @@ void TstScoring::asrs_data()
     // UT-ASRS-04: all max → 6 positives, positive screen
     QTest::newRow("UT-ASRS-04") << QVector<int>{4,4,4,4,4,4} << 6 << true;
 
-    // UT-ASRS-05: items 5–6 at Often(3) only — must NOT count for items 5–6
-    // KEY BOUNDARY: [2,2,2,2,3,3] → 0 positives (items 1–4 < 3; items 5–6 = 3, not 4)
-    QTest::newRow("UT-ASRS-05") << QVector<int>{2,2,2,2,3,3} << 0 << false;
+    // UT-ASRS-05: KEY BOUNDARY between item groups
+    // Sometimes(2) counts for items 1–3 but NOT for item 4; Often(3) counts for items 5–6
+    // [2,2,2,2,3,3] → 3 + 0 + 2 = 5 positives
+    QTest::newRow("UT-ASRS-05") << QVector<int>{2,2,2,2,3,3} << 5 << true;
 
-    // UT-ASRS-06: mixed threshold logic — item 1 positive (3>=3), item 6 positive (4==4)
+    // UT-ASRS-06: mixed threshold logic — item 1 positive (3>=2), item 6 positive (4>=3)
     QTest::newRow("UT-ASRS-06") << QVector<int>{3,0,0,0,0,4} << 2 << false;
 
-    // UT-ASRS-07: 3 items from group 1–4 positive + item 6 positive = 4 → positive screen
+    // UT-ASRS-07: items 1–3 positive + item 5 positive = 4 → positive screen
     QTest::newRow("UT-ASRS-07") << QVector<int>{3,3,3,0,4,0} << 4 << true;
 
-    // UT-ASRS-08: 4 items from group 1–4 positive + item 5 at Often(3) + item 6 at Very Often(4)
-    // item 5 = 3 → NOT positive; item 6 = 4 → positive; total = 5
-    QTest::newRow("UT-ASRS-08") << QVector<int>{3,3,3,3,3,4} << 5 << true;
+    // UT-ASRS-08: all items at or above their threshold; item 5 at Often(3) counts → 6
+    QTest::newRow("UT-ASRS-08") << QVector<int>{3,3,3,3,3,4} << 6 << true;
+
+    // UT-ASRS-09: regression — Sometimes on items 1–3 + Often on item 4 → 4 → positive
+    // (scored as 1 positive / negative screen under the previous, incorrect rule)
+    QTest::newRow("UT-ASRS-09") << QVector<int>{2,2,2,3,0,0} << 4 << true;
+
+    // UT-ASRS-10: one step below each threshold — Rarely(1) on 1–3, Sometimes(2) on 4–6 → 0
+    QTest::newRow("UT-ASRS-10") << QVector<int>{1,1,1,2,2,2} << 0 << false;
 }
 
 void TstScoring::asrs()

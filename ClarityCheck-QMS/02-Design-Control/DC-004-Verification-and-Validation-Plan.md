@@ -76,7 +76,7 @@ The following tests are mandatory release criteria per RM-003 §5. The device sh
 
 | Test ID | Description | RC Reference |
 |---|---|---|
-| UT-ASRS-01 to UT-ASRS-08 | ASRS scoring boundary cases | RC-17, RC-18 |
+| UT-ASRS-01 to UT-ASRS-10 | ASRS scoring boundary cases | RC-17, RC-18 |
 | UT-PHQ-01 to UT-PHQ-12 | PHQ-9 scoring boundary cases including crisis flag | RC-17, RC-19 |
 | UT-GAD-01 to UT-GAD-09 | GAD-7 scoring boundary cases | RC-17, RC-19 |
 | FT-SAFE-01 | PHQ-9 item 9 crisis trigger | RC-09 |
@@ -100,22 +100,26 @@ All unit tests shall be implemented as automated tests in the chosen unit test f
 
 | Test ID | Input [r1,r2,r3,r4,r5,r6] | Expected Score | Expected Result | Pass/Fail | Date | Tester |
 |---|---|---|---|---|---|---|
-| UT-ASRS-01 | [0,0,0,0,0,0] | 0 | NEGATIVE_SCREEN | PASS | 2026-04-12 | PRRC |
-| UT-ASRS-02 | [4,4,4,0,0,0] | 3 | NEGATIVE_SCREEN | PASS | 2026-04-12 | PRRC |
-| UT-ASRS-03 | [3,3,3,3,0,0] | 4 | POSITIVE_SCREEN | PASS | 2026-04-12 | PRRC |
-| UT-ASRS-04 | [4,4,4,4,4,4] | 6 | POSITIVE_SCREEN | PASS | 2026-04-12 | PRRC |
-| UT-ASRS-05 | [2,2,2,2,3,3] | 0 | NEGATIVE_SCREEN | PASS | 2026-04-12 | PRRC |
-| UT-ASRS-06 | [3,0,0,0,0,4] | 2 | NEGATIVE_SCREEN | PASS | 2026-04-12 | PRRC |
-| UT-ASRS-07 | [3,3,3,0,4,0] | 4 | POSITIVE_SCREEN | PASS | 2026-04-12 | PRRC |
-| UT-ASRS-08 | [3,3,3,3,3,4] | 5 | POSITIVE_SCREEN | PASS | 2026-04-12 | PRRC |
+| UT-ASRS-01 | [0,0,0,0,0,0] | 0 | NEGATIVE_SCREEN | | | |
+| UT-ASRS-02 | [4,4,4,0,0,0] | 3 | NEGATIVE_SCREEN | | | |
+| UT-ASRS-03 | [3,3,3,3,0,0] | 4 | POSITIVE_SCREEN | | | |
+| UT-ASRS-04 | [4,4,4,4,4,4] | 6 | POSITIVE_SCREEN | | | |
+| UT-ASRS-05 | [2,2,2,2,3,3] | 5 | POSITIVE_SCREEN | | | |
+| UT-ASRS-06 | [3,0,0,0,0,4] | 2 | NEGATIVE_SCREEN | | | |
+| UT-ASRS-07 | [3,3,3,0,4,0] | 4 | POSITIVE_SCREEN | | | |
+| UT-ASRS-08 | [3,3,3,3,3,4] | 6 | POSITIVE_SCREEN | | | |
+| UT-ASRS-09 | [2,2,2,3,0,0] | 4 | POSITIVE_SCREEN | | | |
+| UT-ASRS-10 | [1,1,1,2,2,2] | 0 | NEGATIVE_SCREEN | | | |
 
 **Key boundary notes:**
-- UT-ASRS-05 verifies items 5–6 require value 4 (Very Often); value 3 (Often) does not count
+- UT-ASRS-05 verifies the group boundary: Sometimes (2) counts for items 1–3 but not item 4; Often (3) counts for items 5–6
+- UT-ASRS-09 is a regression case for the corrected thresholds (negative under the superseded rule)
+- UT-ASRS-10 verifies every item one step below its threshold scores 0
 - UT-ASRS-06 verifies mixed threshold logic across item groups
 - UT-ASRS-03 verifies exact threshold at 4 positive items
 
-**Acceptance criterion:** All 8 tests PASS
-**Result summary:** [x] All pass — Qt Test 6.8.3, 2026-04-12, Windows 11 x86_64, GCC 13.1.0
+**Acceptance criterion:** All 10 tests PASS
+**Result summary:** [ ] Pending re-execution — scoring thresholds corrected after the 2026-04-12 run (which passed against the superseded rule)
 
 ---
 
@@ -707,7 +711,7 @@ Validation confirms the device meets the intended purpose from DC-002 §2. These
 | FR-03 No skip | §5.3 question screen | — | FT-FLOW-02 | |
 | FR-04 Change answer | §5.3 question screen | — | FT-FLOW-03 | |
 | FR-06 Progress | §5.3 question screen | — | FT-FLOW-04 | |
-| FR-07 ASRS scoring | §3.2 scoring spec | RC-17, RC-18 | UT-ASRS-01–08 | |
+| FR-07 ASRS scoring | §3.2 scoring spec | RC-17, RC-18 | UT-ASRS-01–10 | |
 | FR-08 PHQ-9 scoring | §3.3 scoring spec | RC-17 | UT-PHQ-01–12 | |
 | FR-09 GAD-7 scoring | §3.4 scoring spec | RC-17 | UT-GAD-01–09 | |
 | FR-10 Thresholds | §3 scoring spec | RC-17 | UT-PHQ/GAD boundaries | |

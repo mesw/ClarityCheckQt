@@ -35,19 +35,21 @@ This section contains the locked reference text, response options, and scoring s
 
 | Item | Text | Positive Threshold |
 |---|---|---|
-| 1 | How often do you have trouble wrapping up the final details of a project, once the challenging parts have been done? | Often or Very Often |
-| 2 | How often do you have difficulty getting things in order when you have to do a task that requires organisation? | Often or Very Often |
-| 3 | How often do you have problems remembering appointments or obligations? | Often or Very Often |
+| 1 | How often do you have trouble wrapping up the final details of a project, once the challenging parts have been done? | Sometimes, Often or Very Often |
+| 2 | How often do you have difficulty getting things in order when you have to do a task that requires organisation? | Sometimes, Often or Very Often |
+| 3 | How often do you have problems remembering appointments or obligations? | Sometimes, Often or Very Often |
 | 4 | When you have a task that requires a lot of thought, how often do you avoid or delay getting started? | Often or Very Often |
-| 5 | How often do you fidget or squirm with your hands or feet when you have to sit down for a long time? | Very Often |
-| 6 | How often do you feel overly active and compelled to do things, like you were driven by a motor? | Very Often |
+| 5 | How often do you fidget or squirm with your hands or feet when you have to sit down for a long time? | Often or Very Often |
+| 6 | How often do you feel overly active and compelled to do things, like you were driven by a motor? | Often or Very Often |
 
 **Scoring Algorithm**
 
 Each item is scored as either positive (1) or negative (0) based on the threshold above.
 
-- Items 1–4: response of *Often* or *Very Often* = positive (1)
-- Items 5–6: response of *Very Often* only = positive (1)
+- Items 1–3: response of *Sometimes*, *Often* or *Very Often* = positive (1)
+- Items 4–6: response of *Often* or *Very Often* = positive (1)
+
+These thresholds correspond to the darkly shaded boxes of the published ASRS-v1.1 Symptom Checklist (Part A). Corrected from an earlier draft that used items 1–4 ≥ Often and items 5–6 = Very Often only.
 - All other responses = negative (0)
 
 **Screen Result**
@@ -182,8 +184,8 @@ Input: array of 6 integer response values [r1, r2, r3, r4, r5, r6]
        where each value is 0–4 (Never–Very Often)
 
 Positive item logic:
-  items 1–4: positive if value >= 3 (Often or Very Often)
-  items 5–6: positive if value == 4 (Very Often only)
+  items 1–3: positive if value >= 2 (Sometimes, Often or Very Often)
+  items 4–6: positive if value >= 3 (Often or Very Often)
 
 positiveCount = sum of positive items
 
@@ -247,12 +249,15 @@ These are the reference test cases for DC-004 verification of scoring functions 
 | ASRS-02 | [4,4,4,0,0,0] | 3 | NEGATIVE_SCREEN |
 | ASRS-03 | [3,3,3,3,0,0] | 4 | POSITIVE_SCREEN |
 | ASRS-04 | [4,4,4,4,4,4] | 6 | POSITIVE_SCREEN |
-| ASRS-05 | [2,2,2,2,3,3] | 0 | NEGATIVE_SCREEN |
+| ASRS-05 | [2,2,2,2,3,3] | 5 | POSITIVE_SCREEN |
 | ASRS-06 | [3,0,0,0,0,4] | 2 | NEGATIVE_SCREEN |
 | ASRS-07 | [3,3,3,0,4,0] | 4 | POSITIVE_SCREEN |
-| ASRS-08 | [3,3,3,3,3,4] | 5 | POSITIVE_SCREEN |
+| ASRS-08 | [3,3,3,3,3,4] | 6 | POSITIVE_SCREEN |
+| ASRS-09 | [2,2,2,3,0,0] | 4 | POSITIVE_SCREEN |
+| ASRS-10 | [1,1,1,2,2,2] | 0 | NEGATIVE_SCREEN |
 
-*Note: ASRS-05 confirms items 5–6 threshold is Very Often (4) only; Often (3) does not count.*
+*Note: ASRS-05 confirms the group boundary: Sometimes (2) counts for items 1–3 but not item 4; Often (3) counts for items 5–6.*
+*ASRS-09 is a regression case (scored negative under the superseded rule). ASRS-10 places every item one step below its threshold.*
 *ASRS-06 confirms mixed threshold logic across item groups.*
 
 #### 4.2 PHQ-9 Boundary Cases

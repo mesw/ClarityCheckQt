@@ -50,7 +50,7 @@ The project is structured into two parallel, synchronized components:
 2. **Quality Management System (ClarityCheck-QMS/)**: Technical documentation structured for ISO 13485:2016 and EU MDR 2017/745 Class IIa SaMD compliance.
 
 ### Verification Status
-* **Scoring Engine Verification:** 29 of 29 boundary test cases passing in automated Qt Test suite (	st_scoring testing ASRS, PHQ-9, and GAD-7 boundary cut-offs).
+* **Scoring Engine Verification:** 31 boundary test cases (ASRS, PHQ-9, GAD-7) in automated Qt Test suite (	st_scoring testing ASRS, PHQ-9, and GAD-7 boundary cut-offs).
 * **State Machine & Safety Verification:** All automated safety gate tests passing (	st_appstate testing age gates, PHQ-9 Item 9 crisis trigger, and acknowledgement gates).
 * **WebAssembly Deployment:** Single-threaded release build compiled and verified for WebAssembly execution via qtloader.js.
 

@@ -265,7 +265,7 @@ void TstAppState::scores_availableAfterResults()
     AppState s;
     completeFullBattery(s);
     QVERIFY(s.scoresAvailable());
-    // ASRS: all 6 items at 1 (Often) — items 1–4: 1 < 3, not positive; items 5–6: 1 != 4, not positive
+    // ASRS: all 6 items at 1 (Rarely) — items 1–3: 1 < 2, items 4–6: 1 < 3 → none positive
     // positiveCount = 0
     QCOMPARE(s.asrsPositiveCount(), 0);
     QVERIFY(!s.asrsPositiveScreen());
